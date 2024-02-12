@@ -80,36 +80,36 @@ export default {
     <main v-if="portStatus.includes('open')" class="flex flex-row gap-7">
       <div class="border rounded">
         <div class="">
-          <img src="/og-exemple.jpg" alt="OG" class="og-img" />
+          <img src="/og-image.png" alt="OG" class="og-img" />
         </div>
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-sm">Link</a>
+          <a href="" class="uppercase text-[12px]">Link</a>
           <h4 class="font-semibold text-base">Título</h4>
           <p class="text-sm">I want to put a ding in the universe ▲</p>
         </div>
       </div>
       <div class="border rounded">
         <div class="">
-          <img src="/og-exemple.jpg" alt="OG" class="og-img" />
+          <img src="/og-image.png" alt="OG" class="og-img" />
         </div>
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-sm">Link</a>
+          <a href="" class="uppercase text-[12px]">Link</a>
           <h4 class="font-semibold text-base">Título</h4>
           <p class="text-sm">I want to put a ding in the universe ▲</p>
         </div>
       </div>
       <div class="border rounded">
         <div class="">
-          <img src="/og-exemple.jpg" alt="OG" class="og-img" />
+          <img src="/og-image.png" alt="OG" class="og-img" />
         </div>
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-sm">Link</a>
+          <a href="" class="uppercase text-[12px]">Link</a>
           <h4 class="font-semibold text-base">Título</h4>
           <p class="text-sm">I want to put a ding in the universe ▲</p>
         </div>
