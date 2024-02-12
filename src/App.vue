@@ -130,7 +130,13 @@ export default {
         </h3>
         <div class="border rounded bg-zinc-200/45">
           <div class="">
-            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img" />
+            <img
+              :src="`http://localhost:${localPort}/${getMetaTagContent(
+                'og:image'
+              )}`"
+              alt="OG"
+              class="og-img"
+            />
           </div>
           <div
             class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
@@ -157,7 +163,13 @@ export default {
         </h3>
         <div class="border rounded-2xl h-56">
           <div class="">
-            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img-x" />
+            <img
+              :src="`http://localhost:${localPort}/${getMetaTagContent(
+                'og:image'
+              )}`"
+              alt="OG"
+              class="og-img-x"
+            />
             <a
               :href="getMetaTagContent('og:url')"
               class="relative -top-[36px] text-[12px] bg-slate-400/40 px-2 py-1 rounded-lg text-xs m-3"
@@ -176,7 +188,13 @@ export default {
         </h3>
         <div class="border rounded bg-zinc-200/45">
           <div class="">
-            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img" />
+            <img
+              :src="`http://localhost:${localPort}/${getMetaTagContent(
+                'og:image'
+              )}`"
+              alt="OG"
+              class="og-img"
+            />
           </div>
           <div
             class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
@@ -215,8 +233,13 @@ export default {
     <div class="mt-9 sm:mb-3">
       <small class="text-sm font-normal leading-none">
         2024 Built by
-        <a href="https://twitter.com/euotiniel">@euotiniel</a> . Hosted on
-        <a href="https://vercel.com/"> ▲ </a>
+        <a href="https://twitter.com/euotiniel" target="_blank">@euotiniel</a> .
+        The
+        <a href="https://github.com/euotiniel/og-local/" target="_blank">
+          Source Code</a
+        >
+        . Hosted on
+        <a href="https://vercel.com/" target="_blank"> ▲ </a>
       </small>
     </div>
   </footer>
