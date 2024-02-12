@@ -130,7 +130,7 @@ export default {
         </h3>
         <div class="border rounded bg-zinc-200/45">
           <div class="">
-            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img" />
           </div>
           <div
             class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
@@ -157,10 +157,10 @@ export default {
         </h3>
         <div class="border rounded-2xl h-56">
           <div class="">
-            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img-x" />
             <a
               :href="getMetaTagContent('og:url')"
-              class="text-[12px] bg-slate-400/40 px-2 py-1 rounded-lg text-xs m-3"
+              class="relative -top-[36px] text-[12px] bg-slate-400/40 px-2 py-1 rounded-lg text-xs m-3"
               >{{ getMetaTagContent("twitter:title") }}</a
             >
           </div>
@@ -176,7 +176,7 @@ export default {
         </h3>
         <div class="border rounded bg-zinc-200/45">
           <div class="">
-            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+            <img :src="`http://localhost:${localPort}/${getMetaTagContent('og:image')}`" alt="OG" class="og-img" />
           </div>
           <div
             class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
@@ -232,6 +232,11 @@ export default {
 .og-img {
   height: 180px;
   object-fit: cover;
+}
+.og-img-x {
+  height: 221px;
+  object-fit: cover;
+  border-radius: 16px;
 }
 .ilustration {
   height: 180px;
