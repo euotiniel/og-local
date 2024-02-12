@@ -22,7 +22,7 @@ export default {
   methods: {
     async fetchMetaTags() {
       const url = `http://localhost:${this.localPort}`;
-      
+
       try {
         const response = await fetch(url);
         if (response.status === 200) {
@@ -32,7 +32,9 @@ export default {
           const metaTags = Array.from(doc.head.querySelectorAll("meta"));
 
           if (metaTags.length === 0) {
-            console.warn("No meta tags found in the header of the specified URL");
+            console.warn(
+              "No meta tags found in the header of the specified URL"
+            );
             return;
           }
 
@@ -42,7 +44,9 @@ export default {
             content: tag.getAttribute("content") || "",
           }));
         } else {
-          console.warn(`Unable to fetch meta tags. Status code: ${response.status}`);
+          console.warn(
+            `Unable to fetch meta tags. Status code: ${response.status}`
+          );
         }
       } catch (error) {
         console.error("Error retrieving HTML content:", error);
@@ -73,6 +77,13 @@ export default {
       }
 
       this.loading = false;
+    },
+
+    getMetaTagContent(property) {
+      const tag = this.metaTags.find(
+        (tag) => tag.property === property || tag.name === property
+      );
+      return tag ? tag.content : "";
     },
   },
 };
@@ -108,23 +119,10 @@ export default {
         </p>
       </div>
     </header>
-    <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Propertyo</th>
-            <th>Content</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(metaTag, index) in metaTags" :key="index">
-            <td>{{ metaTag.name }}</td>
-            <td>{{ metaTag.property }}</td>
-            <td>{{ metaTag.content }}</td>
-          </tr>
-        </tbody>
-      </table>
+
     <main v-if="portStatus.includes('open')" class="flex flex-row gap-7">
+
+      <!-- Facebook -->
       <div class="border rounded">
         <div class="">
           <img src="/og-image.png" alt="OG" class="og-img" />
@@ -132,11 +130,19 @@ export default {
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          <a
+            :href="getMetaTagContent('og:url')"
+            class="uppercase text-[12px]"
+            >{{ getMetaTagContent("og:title") }}</a
+          >
+          <h4 class="font-semibold text-base">
+            {{ getMetaTagContent("og:title") }}
+          </h4>
+          <p class="text-sm">{{ getMetaTagContent("og:description") }}</p>
         </div>
       </div>
+
+      <!-- X -->
       <div class="border rounded">
         <div class="">
           <img src="/og-image.png" alt="OG" class="og-img" />
@@ -144,11 +150,19 @@ export default {
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          <a
+            :href="getMetaTagContent('twitter:url')"
+            class="uppercase text-[12px]"
+            >{{ getMetaTagContent("twitter:title") }}</a
+          >
+          <h4 class="font-semibold text-base">
+            {{ getMetaTagContent("twitter:title") }}
+          </h4>
+          <p class="text-sm">{{ getMetaTagContent("twitter:description") }}</p>
         </div>
       </div>
+
+      <!-- LinkedIn -->
       <div class="border rounded">
         <div class="">
           <img src="/og-image.png" alt="OG" class="og-img" />
@@ -156,12 +170,18 @@ export default {
         <div
           class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          <h4 class="font-semibold text-base">
+            {{ getMetaTagContent("og:title") }}
+          </h4>
+          <a
+            :href="getMetaTagContent('linkedin:url')"
+            class="uppercase text-[12px]"
+            >{{ getMetaTagContent("og:title") }}</a
+          >
         </div>
       </div>
     </main>
+
     <main v-else class="flex flex-col items-center justify-center gap-4">
       <img
         src="https://illustrations.popsy.co/white/success.svg"
@@ -178,6 +198,7 @@ export default {
       </p>
     </main>
   </div>
+  
   <footer class="flex items-center justify-center border-t my-4 md:my-7">
     <div class="mt-9 sm:mb-3">
       <small class="text-sm font-normal leading-none">
