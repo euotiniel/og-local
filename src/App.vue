@@ -20,25 +20,19 @@ export default {
     },
   },
   methods: {
-    fetchMetaTags(localPort) {
-      const url = this.localPort.trim();
-
-      if (!url) {
-        console.error("URL cannot be empty");
-        return;
-      }
-
-      fetch(url)
-        .then((response) => response.text())
-        .then((html) => {
+    async fetchMetaTags() {
+      const url = `http://localhost:${this.localPort}`;
+      
+      try {
+        const response = await fetch(url);
+        if (response.status === 200) {
+          const html = await response.text();
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, "text/html");
           const metaTags = Array.from(doc.head.querySelectorAll("meta"));
 
           if (metaTags.length === 0) {
-            console.warn(
-              "No meta tags found in the header of the specified URL"
-            );
+            console.warn("No meta tags found in the header of the specified URL");
             return;
           }
 
@@ -47,11 +41,14 @@ export default {
             property: tag.getAttribute("property") || "",
             content: tag.getAttribute("content") || "",
           }));
-        })
-        .catch((error) => {
-          console.error("Error retrieving HTML content:", error);
-        });
+        } else {
+          console.warn(`Unable to fetch meta tags. Status code: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Error retrieving HTML content:", error);
+      }
     },
+
     async checkPort() {
       this.loading = true;
       // const portToCheck = parseInt(this.localPort, 10);
@@ -66,7 +63,7 @@ export default {
         const response = await fetch(`http://localhost:${portToCheck}`);
         if (response.status === 200) {
           this.portStatus = `Port ${portToCheck} is open.`;
-          this.fetchMetaTags();
+          await this.fetchMetaTags();
         } else {
           this.portStatus = `Port ${portToCheck} is closed or blocked.`;
         }
