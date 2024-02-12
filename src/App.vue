@@ -121,63 +121,75 @@ export default {
     </header>
 
     <main v-if="portStatus.includes('open')" class="flex flex-row gap-7">
-
       <!-- Facebook -->
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <a
-            :href="getMetaTagContent('og:url')"
-            class="uppercase text-[12px]"
-            >{{ getMetaTagContent("og:title") }}</a
+          Facebook
+        </h3>
+        <div class="border rounded bg-zinc-200/45">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+          </div>
+          <div
+            class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
           >
-          <h4 class="font-semibold text-base">
-            {{ getMetaTagContent("og:title") }}
-          </h4>
-          <p class="text-sm">{{ getMetaTagContent("og:description") }}</p>
+            <a
+              :href="getMetaTagContent('og:url')"
+              class="uppercase text-[12px]"
+              >{{ getMetaTagContent("og:title") }}</a
+            >
+            <h4 class="font-semibold text-base">
+              {{ getMetaTagContent("og:title") }}
+            </h4>
+            <p class="text-sm">{{ getMetaTagContent("og:description") }}</p>
+          </div>
         </div>
       </div>
 
       <!-- X -->
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <a
-            :href="getMetaTagContent('twitter:url')"
-            class="uppercase text-[12px]"
-            >{{ getMetaTagContent("twitter:title") }}</a
-          >
-          <h4 class="font-semibold text-base">
-            {{ getMetaTagContent("twitter:title") }}
-          </h4>
-          <p class="text-sm">{{ getMetaTagContent("twitter:description") }}</p>
+          X
+        </h3>
+        <div class="border rounded-2xl h-56">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+            <a
+              :href="getMetaTagContent('og:url')"
+              class="text-[12px] bg-slate-400/40 px-2 py-1 rounded-lg text-xs m-3"
+              >{{ getMetaTagContent("twitter:title") }}</a
+            >
+          </div>
         </div>
       </div>
 
       <!-- LinkedIn -->
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <h4 class="font-semibold text-base">
-            {{ getMetaTagContent("og:title") }}
-          </h4>
-          <a
-            :href="getMetaTagContent('linkedin:url')"
-            class="uppercase text-[12px]"
-            >{{ getMetaTagContent("og:title") }}</a
+          LinkedIn
+        </h3>
+        <div class="border rounded bg-zinc-200/45">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+          </div>
+          <div
+            class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
           >
+            <h4 class="font-semibold text-base">
+              {{ getMetaTagContent("og:title") }}
+            </h4>
+            <a
+              :href="getMetaTagContent('linkedin:url')"
+              class="uppercase text-[12px]"
+              >{{ getMetaTagContent("og:title") }}</a
+            >
+          </div>
         </div>
       </div>
     </main>
@@ -198,7 +210,7 @@ export default {
       </p>
     </main>
   </div>
-  
+
   <footer class="flex items-center justify-center border-t my-4 md:my-7">
     <div class="mt-9 sm:mb-3">
       <small class="text-sm font-normal leading-none">
@@ -213,6 +225,9 @@ export default {
 <style scoped>
 .search-input {
   width: 350px;
+}
+.card-item {
+  width: 300px;
 }
 .og-img {
   height: 180px;
