@@ -11,27 +11,60 @@
 <body>
     <h1>My Page with Meta Tags</h1>
     <p>List the header meta tags. Open the console.</p>
+
+    <label for="urlInput">Enter URL:</label>
+    <input type="text" id="urlInput" placeholder="Enter URL">
+    <button id="fetchButton">Fetch Meta Tags</button>
+
+    <table id="metaTagsTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Property</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
     <script>
-        const url = 'https://euotiniel.com/'; 
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            const url = document.getElementById('urlInput').value.trim();
 
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const metaTags = doc.head.querySelectorAll('meta');
+            if (!url) {
+                console.error('URL cannot be empty');
+                return;
+            }
 
-                metaTags.forEach((tag, index) => {
-                    console.log(`Metatag ${index + 1}:`);
-                    console.log(`- Name: ${tag.getAttribute('name')}`);
-                    console.log(`- Content: ${tag.getAttribute('content')}`);
-                    console.log(`- Propriety: ${tag.getAttribute('property')}`);
-                    console.log('---');
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const metaTags = doc.head.querySelectorAll('meta');
+                    const tbody = document.querySelector('#metaTagsTable tbody');
+
+                    tbody.innerHTML = ''; 
+
+                    if (metaTags.length === 0) {
+                        console.warn('No meta tags found in the header of the specified URL');
+                        return;
+                    }
+
+                    metaTags.forEach((tag) => {
+                        const name = tag.getAttribute('name');
+                        const content = tag.getAttribute('content');
+                        const property = tag.getAttribute('property');
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${name || ''}</td><td>${property || ''}</td><td>${content || ''}</td>`;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error retrieving HTML content:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error retrieving HTML content:', error);
-            });
+        });
     </script>
 </body>
 </html>
