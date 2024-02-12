@@ -3,24 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My exmple, list">
+    <meta name="description" content="My example, list">
     <meta name="keywords" content="HTML, metatags, web, lab">
     <meta name="author" content="Otoniel Emanuel">
     <title>My Page with Meta Tags</title>
-    
 </head>
 <body>
     <h1>My Page with Meta Tags</h1>
     <p>List the header meta tags. Open the console.</p>
     <script>
-        const metaTags = document.head.querySelectorAll('meta');
-        
-        metaTags.forEach((tag, index) => {
-            console.log(`Metatag ${index + 1}:`);
-            console.log(`- Nome: ${tag.getAttribute('name')}`);
-            console.log(`- Conteúdo: ${tag.getAttribute('content')}`);
-            console.log('---');
-        });
+        const url = 'https://euotiniel.com/'; 
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const metaTags = doc.head.querySelectorAll('meta');
+
+                metaTags.forEach((tag, index) => {
+                    console.log(`Metatag ${index + 1}:`);
+                    console.log(`- Name: ${tag.getAttribute('name')}`);
+                    console.log(`- Content: ${tag.getAttribute('content')}`);
+                    console.log(`- Propriety: ${tag.getAttribute('property')}`);
+                    console.log('---');
+                });
+            })
+            .catch(error => {
+                console.error('Error retrieving HTML content:', error);
+            });
     </script>
 </body>
 </html>
