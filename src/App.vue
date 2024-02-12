@@ -4,7 +4,8 @@ export default {
     return {
       localPort: "",
       portStatus: "",
-      loading: false
+      metaTags: [],
+      loading: false,
     };
   },
   computed: {
@@ -19,6 +20,39 @@ export default {
     },
   },
   methods: {
+    async fetchMetaTags() {
+      const url = `http://localhost:${this.localPort}`;
+
+      try {
+        const response = await fetch(url);
+        if (response.status === 200) {
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const metaTags = Array.from(doc.head.querySelectorAll("meta"));
+
+          if (metaTags.length === 0) {
+            console.warn(
+              "No meta tags found in the header of the specified URL"
+            );
+            return;
+          }
+
+          this.metaTags = metaTags.map((tag) => ({
+            name: tag.getAttribute("name") || "",
+            property: tag.getAttribute("property") || "",
+            content: tag.getAttribute("content") || "",
+          }));
+        } else {
+          console.warn(
+            `Unable to fetch meta tags. Status code: ${response.status}`
+          );
+        }
+      } catch (error) {
+        console.error("Error retrieving HTML content:", error);
+      }
+    },
+
     async checkPort() {
       this.loading = true;
       // const portToCheck = parseInt(this.localPort, 10);
@@ -33,6 +67,7 @@ export default {
         const response = await fetch(`http://localhost:${portToCheck}`);
         if (response.status === 200) {
           this.portStatus = `Port ${portToCheck} is open.`;
+          await this.fetchMetaTags();
         } else {
           this.portStatus = `Port ${portToCheck} is closed or blocked.`;
         }
@@ -42,6 +77,13 @@ export default {
       }
 
       this.loading = false;
+    },
+
+    getMetaTagContent(property) {
+      const tag = this.metaTags.find(
+        (tag) => tag.property === property || tag.name === property
+      );
+      return tag ? tag.content : "";
     },
   },
 };
@@ -62,7 +104,7 @@ export default {
           class="search-input border rounded p-2 outline-none text-sm"
         />
         <button
-          :class="{ 'loading': loading }"
+          :class="{ loading: loading }"
           :disabled="loading"
           class="bg-slate-950 text-gray-50 border-none px-2 p-1 border rounded text-base"
         >
@@ -77,44 +119,81 @@ export default {
         </p>
       </div>
     </header>
+
     <main v-if="portStatus.includes('open')" class="flex flex-row gap-7">
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+      <!-- Facebook -->
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          Facebook
+        </h3>
+        <div class="border rounded bg-zinc-200/45">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+          </div>
+          <div
+            class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
+          >
+            <a
+              :href="getMetaTagContent('og:url')"
+              class="uppercase text-[12px]"
+              >{{ getMetaTagContent("og:title") }}</a
+            >
+            <h4 class="font-semibold text-base">
+              {{ getMetaTagContent("og:title") }}
+            </h4>
+            <p class="text-sm">{{ getMetaTagContent("og:description") }}</p>
+          </div>
         </div>
       </div>
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+
+      <!-- X -->
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          X
+        </h3>
+        <div class="border rounded-2xl h-56">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+            <a
+              :href="getMetaTagContent('og:url')"
+              class="text-[12px] bg-slate-400/40 px-2 py-1 rounded-lg text-xs m-3"
+              >{{ getMetaTagContent("twitter:title") }}</a
+            >
+          </div>
         </div>
       </div>
-      <div class="border rounded">
-        <div class="">
-          <img src="/og-image.png" alt="OG" class="og-img" />
-        </div>
-        <div
-          class="flex flex-col items-start justify-start p-2 gap-1 bg-zinc-200/45 border-t-2"
+
+      <!-- LinkedIn -->
+      <div class="card-item">
+        <h3
+          class="scroll-m-20 text-lg font-semibold tracking-tight text-center mb-5"
         >
-          <a href="" class="uppercase text-[12px]">Link</a>
-          <h4 class="font-semibold text-base">Título</h4>
-          <p class="text-sm">I want to put a ding in the universe ▲</p>
+          LinkedIn
+        </h3>
+        <div class="border rounded bg-zinc-200/45">
+          <div class="">
+            <img :src="getMetaTagContent('og:image')" alt="OG" class="og-img" />
+          </div>
+          <div
+            class="flex flex-col items-start justify-start p-2 gap-1 border-t-2"
+          >
+            <h4 class="font-semibold text-base">
+              {{ getMetaTagContent("og:title") }}
+            </h4>
+            <a
+              :href="getMetaTagContent('linkedin:url')"
+              class="uppercase text-[12px]"
+              >{{ getMetaTagContent("og:title") }}</a
+            >
+          </div>
         </div>
       </div>
     </main>
+
     <main v-else class="flex flex-col items-center justify-center gap-4">
       <img
         src="https://illustrations.popsy.co/white/success.svg"
@@ -131,6 +210,7 @@ export default {
       </p>
     </main>
   </div>
+
   <footer class="flex items-center justify-center border-t my-4 md:my-7">
     <div class="mt-9 sm:mb-3">
       <small class="text-sm font-normal leading-none">
@@ -145,6 +225,9 @@ export default {
 <style scoped>
 .search-input {
   width: 350px;
+}
+.card-item {
+  width: 300px;
 }
 .og-img {
   height: 180px;
