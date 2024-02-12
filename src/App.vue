@@ -4,7 +4,8 @@ export default {
     return {
       localPort: "",
       portStatus: "",
-      loading: false
+      metaTags: [],
+      loading: false,
     };
   },
   computed: {
@@ -19,6 +20,38 @@ export default {
     },
   },
   methods: {
+    fetchMetaTags(localPort) {
+      const url = this.localPort.trim();
+
+      if (!url) {
+        console.error("URL cannot be empty");
+        return;
+      }
+
+      fetch(url)
+        .then((response) => response.text())
+        .then((html) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const metaTags = Array.from(doc.head.querySelectorAll("meta"));
+
+          if (metaTags.length === 0) {
+            console.warn(
+              "No meta tags found in the header of the specified URL"
+            );
+            return;
+          }
+
+          this.metaTags = metaTags.map((tag) => ({
+            name: tag.getAttribute("name") || "",
+            property: tag.getAttribute("property") || "",
+            content: tag.getAttribute("content") || "",
+          }));
+        })
+        .catch((error) => {
+          console.error("Error retrieving HTML content:", error);
+        });
+    },
     async checkPort() {
       this.loading = true;
       // const portToCheck = parseInt(this.localPort, 10);
@@ -33,6 +66,7 @@ export default {
         const response = await fetch(`http://localhost:${portToCheck}`);
         if (response.status === 200) {
           this.portStatus = `Port ${portToCheck} is open.`;
+          this.fetchMetaTags();
         } else {
           this.portStatus = `Port ${portToCheck} is closed or blocked.`;
         }
@@ -62,7 +96,7 @@ export default {
           class="search-input border rounded p-2 outline-none text-sm"
         />
         <button
-          :class="{ 'loading': loading }"
+          :class="{ loading: loading }"
           :disabled="loading"
           class="bg-slate-950 text-gray-50 border-none px-2 p-1 border rounded text-base"
         >
@@ -77,6 +111,22 @@ export default {
         </p>
       </div>
     </header>
+    <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Propertyo</th>
+            <th>Content</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(metaTag, index) in metaTags" :key="index">
+            <td>{{ metaTag.name }}</td>
+            <td>{{ metaTag.property }}</td>
+            <td>{{ metaTag.content }}</td>
+          </tr>
+        </tbody>
+      </table>
     <main v-if="portStatus.includes('open')" class="flex flex-row gap-7">
       <div class="border rounded">
         <div class="">
