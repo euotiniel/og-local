@@ -1,5 +1,9 @@
 <script>
+import Footer from './components/Footer.vue';
 export default {
+  components: {
+    Footer,
+  },
   data() {
     return {
       localPort: "",
@@ -228,21 +232,7 @@ export default {
       </p>
     </main>
   </div>
-
-  <footer class="flex items-center justify-center border-t my-4 md:my-7">
-    <div class="mt-9 sm:mb-3">
-      <small class="text-sm font-normal leading-none">
-        2024 Built by
-        <a href="https://twitter.com/euotiniel" target="_blank">@euotiniel</a> .
-        The
-        <a href="https://github.com/euotiniel/og-local/" target="_blank">
-          Source Code</a
-        >
-        . Hosted on
-        <a href="https://vercel.com/" target="_blank"> ▲ </a>
-      </small>
-    </div>
-  </footer>
+  <Footer />
 </template>
 
 <style scoped>
@@ -262,7 +252,8 @@ export default {
   border-radius: 16px;
 }
 .ilustration {
-  height: 180px;
+  height: 190px;
   object-fit: cover;
+  user-select: none;
 }
 </style>
