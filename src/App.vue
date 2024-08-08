@@ -19,7 +19,7 @@ export default {
       } else if (this.portStatus.includes("closed")) {
         return { color: "red" };
       } else {
-        return { color: "black" };
+        return { color: "#fdc500" };
       }
     },
   },
